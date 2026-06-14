@@ -1,0 +1,27 @@
+# wrangler.toml
+name = "instagram-downloader-bot"
+main = "bot.py"
+compatibility_date = "2026-06-14"
+
+[vars]
+BOT_TOKEN = "توکن_ربات_تلگرام_شما"
+RAPIDAPI_KEY = "کلید_رپید_آی_پی_آی_شما"
+PROFILE_CHANNEL_ID = "-100xxxxxxxxx"
+POST_CHANNEL_ID = "-100xxxxxxxxx"
+REEL_CHANNEL_ID = "-100xxxxxxxxx"
+STORY_CHANNEL_ID = "-100xxxxxxxxx"
+HIGHLIGHT_CHANNEL_ID = "-100xxxxxxxxx"
+INDEX_CHANNEL_ID = "-100xxxxxxxxx"
+
+[[kv_namespaces]]
+binding = "INDEX_KV"
+id = "شناسه‌ای_که_کلودفلر_بهت_میده"
+
+[[queues.producers]]
+queue = "instagram-download-queue"
+binding = "DOWNLOAD_QUEUE"
+
+[[queues.consumers]]
+queue = "instagram-download-queue"
+max_batch_size = 1
+max_batch_timeout = 1
