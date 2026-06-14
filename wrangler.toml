@@ -1,23 +1,13 @@
-# wrangler.toml
 name = "instagram-bot"
-main = "bot.py"
+main = "src/index.js"
 compatibility_date = "2026-06-14"
-compatibility_flags = [ "python_workers" ]
 
-[vars]
-BOT_TOKEN = ""
-RAPIDAPI_KEY = ""
-PROFILE_CHANNEL_ID = ""
-POST_CHANNEL_ID = ""
-REEL_CHANNEL_ID = ""
-STORY_CHANNEL_ID = ""
-HIGHLIGHT_CHANNEL_ID = ""
-INDEX_CHANNEL_ID = ""
-
+# اتصال به دیتابیس کی-ولیو برای کش کردن سریع لینک‌ها
 [[kv_namespaces]]
 binding = "INDEX_KV"
 id = "5ebfdb682065445d88712f8cbe10d93e"
 
+# تعریف سیستم صف برای پردازش پس‌زمینه
 [[queues.producers]]
 queue = "instagram-download-queue"
 binding = "DOWNLOAD_QUEUE"
@@ -25,4 +15,3 @@ binding = "DOWNLOAD_QUEUE"
 [[queues.consumers]]
 queue = "instagram-download-queue"
 max_batch_size = 1
-max_batch_timeout = 1
