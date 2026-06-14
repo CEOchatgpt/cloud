@@ -16,7 +16,7 @@ INDEX_CHANNEL_ID = "-100xxxxxxxxx"
 
 [[kv_namespaces]]
 binding = "INDEX_KV"
-id = "شناسه‌ای_که_کلودفلر_بهت_میده"
+id = "5ebfdb682065445d88712f8cbe10d93e"
 
 [[queues.producers]]
 queue = "instagram-download-queue"
