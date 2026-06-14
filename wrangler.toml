@@ -3,7 +3,6 @@ name = "instagram-bot"
 main = "bot.py"
 compatibility_date = "2026-06-14"
 compatibility_flags = [ "python_workers" ]
-disable_python_external_sdk = true  # <--- این خط را اضافه کن تا باگ سیستم بیلد رفع شود
 
 [vars]
 BOT_TOKEN = ""
