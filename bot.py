@@ -19,7 +19,7 @@ async def on_fetch(request, env, ctx):
             text = message["text"]
 
             if text == "/start":
-                await send_telegram_message(env.BOT_TOKEN, chat_id, "سلام آریان عزیز به ربات دانلودر پیشرفته اینستاگرام خوش آمدی! 🚀\nلطفاً لینک مورد نظرت رو بفرست.")
+                await send_telegram_message(env.BOT_TOKEN, chat_id, "سلام به ربات دانلودر پیشرفته اینستاگرام خوش آمدی! 🚀\nلطفاً لینک مورد نظرت رو بفرست.")
                 return Response.new("OK", status=200)
 
             # بررسی لینک اینستاگرام
