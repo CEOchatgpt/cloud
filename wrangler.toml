@@ -2,6 +2,7 @@
 name = "instagram-downloader-bot"
 main = "bot.py"
 compatibility_date = "2026-06-14"
+compatibility_flags = [ "python_workers" ]
 
 [vars]
 BOT_TOKEN = "توکن_ربات_تلگرام_شما"
