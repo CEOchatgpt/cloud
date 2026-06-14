@@ -1,22 +1,23 @@
 # wrangler.toml
-name = "instagram-downloader-bot"
+name = "instagram-bot"
 main = "bot.py"
 compatibility_date = "2026-06-14"
 compatibility_flags = [ "python_workers" ]
+disable_python_external_sdk = true  # <--- این خط را اضافه کن تا باگ سیستم بیلد رفع شود
 
 [vars]
-BOT_TOKEN = "توکن_ربات_تلگرام_شما"
-RAPIDAPI_KEY = "کلید_رپید_آی_پی_آی_شما"
-PROFILE_CHANNEL_ID = "-100xxxxxxxxx"
-POST_CHANNEL_ID = "-100xxxxxxxxx"
-REEL_CHANNEL_ID = "-100xxxxxxxxx"
-STORY_CHANNEL_ID = "-100xxxxxxxxx"
-HIGHLIGHT_CHANNEL_ID = "-100xxxxxxxxx"
-INDEX_CHANNEL_ID = "-100xxxxxxxxx"
+BOT_TOKEN = ""
+RAPIDAPI_KEY = ""
+PROFILE_CHANNEL_ID = ""
+POST_CHANNEL_ID = ""
+REEL_CHANNEL_ID = ""
+STORY_CHANNEL_ID = ""
+HIGHLIGHT_CHANNEL_ID = ""
+INDEX_CHANNEL_ID = ""
 
 [[kv_namespaces]]
 binding = "INDEX_KV"
-id = "5ebfdb682065445d88712f8cbe10d93e"
+id = "شناسه_KV_شما"
 
 [[queues.producers]]
 queue = "instagram-download-queue"
