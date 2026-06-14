@@ -1,7 +1,46 @@
 # bot.py
 import json
-from extract_instagram_id import extract_instagram_id
+import re
 
+# =====================================================================
+# تابع استخراج لینک (که قبلاً توی فایل جداگانه بود و الان اینجا یکپارچه شده)
+# =====================================================================
+def extract_instagram_id(url_or_text: str) -> dict:
+    patterns = {
+        'post': r'instagram\\.com/p/([A-Za-z0-9_-]+)',
+        'reel': r'instagram\\.com/reel/([A-Za-z0-9_-]+)',
+        'tv': r'instagram\\.com/tv/([A-Za-z0-9_-]+)',
+        'story': r'instagram\\.com/stories/([^/]+)/(\\d+)',
+        'highlight': r'instagram\\.com/stories/highlights/(\\d+)',
+    }
+    
+    for media_type, pattern in patterns.items():
+        match = re.search(pattern, url_or_text)
+        if match:
+            if media_type in ['post', 'reel', 'tv']:
+                return {
+                    'type': media_type,
+                    'id': match.group(1),
+                    'full_id': f"{media_type}:{match.group(1)}"
+                }
+            elif media_type == 'story':
+                return {
+                    'type': 'story',
+                    'username': match.group(1),
+                    'story_id': match.group(2),
+                    'full_id': f"story:{match.group(1)}:{match.group(2)}"
+                }
+            elif media_type == 'highlight':
+                return {
+                    'type': 'highlight',
+                    'id': match.group(1),
+                    'full_id': f"highlight:{match.group(1)}"
+                }
+    return None
+
+# =====================================================================
+# هسته اصلی ربات کلودفلر
+# =====================================================================
 async def on_fetch(request, env, ctx):
     """
     هر پیام یا دستوری در تلگرام بیاد، اول مستقیماً وارد این تابع کلودفلر میشه.
@@ -19,15 +58,15 @@ async def on_fetch(request, env, ctx):
             text = message["text"]
 
             if text == "/start":
-                await send_telegram_message(env.BOT_TOKEN, chat_id, "سلام به ربات دانلودر پیشرفته اینستاگرام خوش آمدی! 🚀\nلطفاً لینک مورد نظرت رو بفرست.")
+                await send_telegram_message(env.BOT_TOKEN, chat_id, "سلام آریان عزیز به ربات دانلودر پیشرفته اینستاگرام خوش آمدی! 🚀\nلطفاً لینک مورد نظرت رو بفرست.")
                 return Response.new("OK", status=200)
 
-            # بررسی لینک اینستاگرام
+            # بررسی لینک اینستاگرام با تابع داخلی
             extracted = extract_instagram_id(text)
             if extracted:
                 await send_telegram_message(env.BOT_TOKEN, chat_id, "لینک شما دریافت شد. در حال پردازش و دانلود... ⚡")
                 
-                # فرستادن لینک به صف پس‌زمینه کلودفلر تا ربات به خاطر زمان طولانی دانلود کرش نکنه
+                # فرستادن لینک به صف پس‌زمینه کلودفلر
                 queue_data = {
                     "chat_id": chat_id,
                     "url": text,
@@ -45,7 +84,7 @@ async def on_fetch(request, env, ctx):
 
 async def queue_handler(batch, env, ctx):
     """
-    این پروسس در پس‌زمینه اجرا میشه؛ رکوئست به RapidAPI می‌زنه و فایل رو در کانال‌هات آپلود می‌کنه.
+    این پروسس در پس‌زمینه اجرا میشه؛ رکوئست به RapidAPI می‌زنه و فایل رو آپلود می‌کنه.
     """
     from rapidapi_service import get_instagram_media
     
@@ -55,8 +94,8 @@ async def queue_handler(batch, env, ctx):
         url = data.get("url")
         
         try:
-            # فراخوانی تابع اصلی دانلود شما با ساختار جدید env کلودفلر
-            await get_instagram_media(url, context=None, env=env, chat_id=chat_id)
+            # فراخوانی تابع اصلی دانلود
+            await get_instagram_media(url, env=env, chat_id=chat_id)
         except Exception as e:
             await send_telegram_message(env.BOT_TOKEN, chat_id, "متأسفانه در دانلود این لینک خطایی رخ داد. ⚠️")
         finally:
